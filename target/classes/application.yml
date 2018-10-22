@@ -1,0 +1,8 @@
+server:
+ port: 8080
+spring:
+ data:
+   mongodb:
+     database: baza
+     port: 27017
+     host: 127.0.0.1

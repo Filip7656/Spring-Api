@@ -1,0 +1,38 @@
+{
+    "characters": [
+    {
+        "id": "1",
+        "name": "Peter Dinklage",
+        "age": "45"
+    },
+    {
+        "id": "2",
+        "name": "Lina Heady",
+        "age": "43"
+    },
+    {
+        "id": "3",
+        "name": "Emilia Clarke",
+        "age": "30"
+    },
+    {
+        "id": "4",
+        "name": "Kit Harrington",
+        "age": "30"
+    },
+    {
+        "id": "5",
+        "name": "Piotr Chojnowski",
+        "age": "3565465555550"
+    },
+    {
+        "id": "5",
+        "name": "Filip Chlebowski",
+        "age": "356"
+    },
+    {
+        "id": "6",
+        "name": "Sean Bean",
+        "age": "50"
+    }]
+}
