@@ -46,8 +46,7 @@ public class EmailSender {
 		msg.append(message + confirmation);
 		msg.append("</br>");
 		msg.append("</body></html>");
-
-		// Template t = freemarkerConfig.getTemplate("EmailTemplate.ftl");
+		// Template t = freemarkerConfig.getTemplate("emial-template.ftl");
 		// String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, userNew);
 		sendEmail(initHtmlEmail(), userNew.getEmail(), subject, msg.toString(), Collections.emptyMap());
 
