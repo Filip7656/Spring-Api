@@ -164,8 +164,25 @@ public class Api {
 			}
 			ResponseEntity.status(HttpStatus.CREATED).build();
 		}
-		return new ResponseEntity<User>(CommonUtils.redirectUrl(), HttpStatus.SEE_OTHER);
 
 	}
 
+	@RequestMapping(path = "/login/{userId}", method = RequestMethod.DELETE)
+	public ResponseEntity<User> loginCheck(@PathVariable("userId") String userId) throws EmailException {
+		Optional<User> userFromDatabase = userRepository.findById(userId);
+		if (!userFromDatabase.isPresent()) {
+			// ==================================================================
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("User not found by: " + userId);
+			}
+			// ==================================================================
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		User userConfirmed = userFromDatabase.get();
+
+		LOG.info("User logged in :" + userConfirmed.getEmail());
+
+		return new ResponseEntity<User>(HttpStatus.ACCEPTED);
+
+	}
 }

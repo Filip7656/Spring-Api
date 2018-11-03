@@ -23,11 +23,4 @@ public class ApiTest {
 
 	}
 
-	@Test
-	public void CheckUserAdd() {
-		RestTemplate client = new RestTemplate();
-		List<User> response = client.postForEntity(url, user);
-		System.out.println(response);
-
-	}
 }
