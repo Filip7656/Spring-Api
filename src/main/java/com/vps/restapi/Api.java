@@ -50,6 +50,10 @@ public class Api {
 		// ==================================================================
 		LOG.info("user received");
 		// ==================================================================
+		if (userRepository.existsById(userData.getEmail())) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+
 		String email = userData.getEmail();
 		userData.setToken(CommonUtils.generateUuid());
 		if (email == null || email.isEmpty()) {
@@ -164,25 +168,30 @@ public class Api {
 			}
 			ResponseEntity.status(HttpStatus.CREATED).build();
 		}
+		return new ResponseEntity<User>(CommonUtils.redirectUrl(), HttpStatus.SEE_OTHER);
 
 	}
 
-	@RequestMapping(path = "/login/{userId}", method = RequestMethod.DELETE)
-	public ResponseEntity<User> loginCheck(@PathVariable("userId") String userId) throws EmailException {
-		Optional<User> userFromDatabase = userRepository.findById(userId);
+	@RequestMapping(path = "/login", method = RequestMethod.PUT)
+	public ResponseEntity<User> loginCheck(@RequestBody User userLog) throws EmailException {
+		Optional<User> userFromDatabase = userRepository.findById(userLog.getEmail());
+		User userToCheck = userFromDatabase.get();
 		if (!userFromDatabase.isPresent()) {
 			// ==================================================================
 			if (LOG.isDebugEnabled()) {
-				LOG.debug("User not found by: " + userId);
+				LOG.debug("User not found by: " + userLog.getEmail());
 			}
 			// ==================================================================
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
-		User userConfirmed = userFromDatabase.get();
+		if (!userLog.getPassword().equals(userToCheck.getPassword())) {
 
-		LOG.info("User logged in :" + userConfirmed.getEmail());
+			LOG.error("Invalid Password");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		} else {
+			return new ResponseEntity<User>(CommonUtils.loginUrl(), HttpStatus.ACCEPTED);
 
-		return new ResponseEntity<User>(HttpStatus.ACCEPTED);
+		}
 
 	}
 }
