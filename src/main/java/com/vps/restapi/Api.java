@@ -174,8 +174,7 @@ public class Api {
 
 	@RequestMapping(path = "/login", method = RequestMethod.PUT)
 	public ResponseEntity<User> loginCheck(@RequestBody User userLog) throws EmailException {
-		Optional<User> userFromDatabase = userRepository.findById(userLog.getEmail());
-		User userToCheck = userFromDatabase.get();
+		Optional<User> userFromDatabase = userRepository.findByEmail(userLog.getEmail());
 		if (!userFromDatabase.isPresent()) {
 			// ==================================================================
 			if (LOG.isDebugEnabled()) {
@@ -184,6 +183,7 @@ public class Api {
 			// ==================================================================
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
+		User userToCheck = userFromDatabase.get();
 		if (!userLog.getPassword().equals(userToCheck.getPassword())) {
 
 			LOG.error("Invalid Password");
