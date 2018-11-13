@@ -50,7 +50,9 @@ public class Api {
 		// ==================================================================
 		LOG.info("user received");
 		// ==================================================================
-		if (userRepository.existsById(userData.getEmail())) {
+
+		if (userRepository.findByEmail(userData.getEmail()).isPresent()) {
+			LOG.error("User already exist");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
 
@@ -175,23 +177,22 @@ public class Api {
 	@RequestMapping(path = "/login", method = RequestMethod.PUT)
 	public ResponseEntity<User> loginCheck(@RequestBody User userLog) throws EmailException {
 		Optional<User> userFromDatabase = userRepository.findByEmail(userLog.getEmail());
+		LOG.info("user to login received");
 		if (!userFromDatabase.isPresent()) {
 			// ==================================================================
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("User not found by: " + userLog.getEmail());
-			}
+			LOG.debug("User not found by: " + userLog.getEmail());
+
 			// ==================================================================
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
+		LOG.info("User found");
 		User userToCheck = userFromDatabase.get();
 		if (!userLog.getPassword().equals(userToCheck.getPassword())) {
 
 			LOG.error("Invalid Password");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-		} else {
-			return new ResponseEntity<User>(CommonUtils.loginUrl(), HttpStatus.ACCEPTED);
-
 		}
+		return new ResponseEntity<User>(CommonUtils.loginUrl(), HttpStatus.ACCEPTED);
 
 	}
 }

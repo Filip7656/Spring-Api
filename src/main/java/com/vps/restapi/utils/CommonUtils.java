@@ -19,7 +19,7 @@ public class CommonUtils {
 
 	public static HttpHeaders loginUrl() {
 		HttpHeaders headers = new HttpHeaders();
-		String redirectUrl = "http://localhost:4200/";
+		String redirectUrl = "http://localhost:4200/home";
 		headers.add("Location", redirectUrl);
 		return headers;
 	}
