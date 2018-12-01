@@ -32,7 +32,7 @@ public class EmailSender {
 	static String fromAddress = "noreply@service.com";
 
 	@Autowired
-	private static Configuration freemarkerConfig;
+	private static Configuration getFreeMarkerConfiguration;
 
 	public static void newAccountEmail(User userNew) throws EmailException, TemplateNotFoundException,
 			MalformedTemplateNameException, ParseException, IOException, TemplateException {
@@ -46,7 +46,8 @@ public class EmailSender {
 		msg.append(message + confirmation);
 		msg.append("</br>");
 		msg.append("</body></html>");
-		// Template t = freemarkerConfig.getTemplate("emial-template.ftl");
+
+		// Template t = getFreeMarkerConfiguration.getTemplate("emial-template.ftl");
 		// String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, userNew);
 		sendEmail(initHtmlEmail(), userNew.getEmail(), subject, msg.toString(), Collections.emptyMap());
 

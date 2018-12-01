@@ -58,6 +58,7 @@ public class Api {
 
 		String email = userData.getEmail();
 		userData.setToken(CommonUtils.generateUuid());
+		userData.setPermissions("user");
 		if (email == null || email.isEmpty()) {
 			// ==================================================================
 			if (LOG.isDebugEnabled()) {
@@ -192,6 +193,24 @@ public class Api {
 			LOG.error("Invalid Password");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
+		return new ResponseEntity<User>(CommonUtils.loginUrl(), HttpStatus.ACCEPTED);
+
+	}
+
+	@RequestMapping(path = "/login/changepass", method = RequestMethod.PUT)
+	public ResponseEntity<User> userChangePassword(@RequestBody User userLog) throws EmailException {
+		Optional<User> userFromDatabase = userRepository.findByEmail(userLog.getEmail());
+		LOG.info("email received");
+		if (!userFromDatabase.isPresent()) {
+			// ==================================================================
+			LOG.debug("User not found by: " + userLog.getEmail());
+
+			// ==================================================================
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		LOG.info("User found");
+		// tutaj mail wysłany z linkiem do zmiany hasla
+
 		return new ResponseEntity<User>(CommonUtils.loginUrl(), HttpStatus.ACCEPTED);
 
 	}

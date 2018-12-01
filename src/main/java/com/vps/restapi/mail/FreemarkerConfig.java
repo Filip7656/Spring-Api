@@ -9,7 +9,7 @@ public class FreemarkerConfig {
 	@Bean
 	public FreeMarkerConfigurationFactoryBean getFreeMarkerConfiguration() {
 		FreeMarkerConfigurationFactoryBean bean = new FreeMarkerConfigurationFactoryBean();
-		bean.setTemplateLoaderPath("/resources/templates");
+		bean.setTemplateLoaderPath("../resources/templates");
 		return bean;
 	}
 

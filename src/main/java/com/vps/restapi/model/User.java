@@ -15,6 +15,7 @@ public class User implements Serializable {
 	private Boolean active;
 	private Boolean confirmed;
 	private String token;
+	private String permissions;
 
 	public User() {
 		super();
@@ -107,6 +108,14 @@ public class User implements Serializable {
 
 	public void setToken(String string) {
 		this.token = string;
+	}
+
+	public String getPermissions() {
+		return permissions;
+	}
+
+	public void setPermissions(String permissions) {
+		this.permissions = permissions;
 	}
 
 }

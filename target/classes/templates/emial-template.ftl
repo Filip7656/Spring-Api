@@ -33,8 +33,8 @@
         </tr>
         <tr>
             <td bgcolor="#777777" style="padding: 30px 30px 30px 30px;">
-                <p>${signature}</p>
-                <p>${location}</p>
+                <p>${email}</p>
+                <p>${password}</p>
             </td>
         </tr>
     </table>
