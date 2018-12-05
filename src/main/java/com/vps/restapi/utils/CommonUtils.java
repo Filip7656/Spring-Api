@@ -23,4 +23,11 @@ public class CommonUtils {
 		headers.add("Location", redirectUrl);
 		return headers;
 	}
+
+	public static HttpHeaders PasswordUrl() {
+		HttpHeaders headers = new HttpHeaders();
+		String redirectUrl = "http://localhost:4200/passwordChange";
+		headers.add("Location", redirectUrl);
+		return headers;
+	}
 }

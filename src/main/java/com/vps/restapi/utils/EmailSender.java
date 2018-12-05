@@ -121,6 +121,21 @@ public class EmailSender {
 		sendEmail(initHtmlEmail(), userConfirmed.getEmail(), subject, msg.toString(), Collections.emptyMap());
 	}
 
+	public static void changePassword(User userPassword) throws EmailException {
+		String subject = "Change password";
+		String message = "<h1>" + userPassword.getFirstName() + "!" + "</h1>" + "<h1>click here to change password</h1>"
+				+ "http://localhost:8080/user/password" + userPassword.getToken();
+		// link do angulara z przeniesiona zmienna email uzytkownika
+		StringBuffer msg = new StringBuffer();
+		msg.append("<html><body>");
+		msg.append("<br>");
+		msg.append(message);
+		msg.append("</br>");
+		msg.append("</body></html>");
+
+		sendEmail(initHtmlEmail(), userPassword.getEmail(), subject, msg.toString(), Collections.emptyMap());
+	}
+
 	private static void sendEmail(HtmlEmail htmlEmail, String toAddress, String subject, String message,
 			Map<String, File> imagesToEmbed) {
 		try {
