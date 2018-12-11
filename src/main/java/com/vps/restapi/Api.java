@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vps.restapi.model.User;
@@ -198,7 +199,8 @@ public class Api {
 	}
 
 	@RequestMapping(path = "/login/changepass", method = RequestMethod.PUT)
-	public ResponseEntity<User> userChangePassword(@RequestBody User userLog) throws EmailException {
+	public @ResponseBody ResponseEntity<User> userChangePassword(@RequestBody User userLog) throws EmailException,
+			TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException {
 		Optional<User> userFromDatabase = userRepository.findByEmail(userLog.getEmail());
 		LOG.info("email received");
 		if (!userFromDatabase.isPresent()) {
@@ -210,41 +212,14 @@ public class Api {
 		}
 		LOG.info("User found");
 		User userPassword = userFromDatabase.get();
+		EmailSender.changePasswordEmail(userPassword);
 
-		if (userPassword.getPassword() == userLog.getPassword()) {
-			LOG.debug("Password match");
-			EmailSender.changePassword(userPassword);
-			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-		} else {
-
-			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
-
-		}
+		return new ResponseEntity<User>(HttpStatus.ACCEPTED);
 
 	}
 
-	// bezsensowne
-	@RequestMapping(path = "password/{token}")
-	public ResponseEntity<User> checkPasswordToken(@PathVariable("token") String token) throws EmailException {
-
-		Optional<User> userFromDatabase = userRepository.findByToken(token);
-		if (!userFromDatabase.isPresent()) {
-			// ==================================================================
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("User not found by: " + token);
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-			}
-			// ==================================================================
-		}
-		User userPass = userFromDatabase.get();
-		if (userPass.getToken() == token) {
-			return new ResponseEntity<User>(CommonUtils.PasswordUrl(), HttpStatus.SEE_OTHER);
-		}
-		return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
-	}
-
-	@RequestMapping(path = "/login/changepass", method = RequestMethod.PUT)
-	public ResponseEntity<User> passwordCheck(@RequestBody User userLog) throws EmailException {
+	@RequestMapping(path = "/changepass", method = RequestMethod.PUT)
+	public ResponseEntity<User> passwordChange(@RequestBody User userLog) throws EmailException {
 		Optional<User> userFromDatabase = userRepository.findByEmail(userLog.getEmail());
 		LOG.info("user to passchange received");
 		if (!userFromDatabase.isPresent()) {

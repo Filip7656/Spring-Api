@@ -121,19 +121,21 @@ public class EmailSender {
 		sendEmail(initHtmlEmail(), userConfirmed.getEmail(), subject, msg.toString(), Collections.emptyMap());
 	}
 
-	public static void changePassword(User userPassword) throws EmailException {
-		String subject = "Change password";
-		String message = "<h1>" + userPassword.getFirstName() + "!" + "</h1>" + "<h1>click here to change password</h1>"
-				+ "http://localhost:8080/user/password" + userPassword.getToken();
-		// link do angulara z przeniesiona zmienna email uzytkownika
+	public static void changePasswordEmail(User userPass) throws EmailException, TemplateNotFoundException,
+			MalformedTemplateNameException, ParseException, IOException, TemplateException {
+		String subject = "Hello " + userPass.getFirstName();
+		String message = "Hello " + userPass.getFirstName() + " " + userPass.getLastName();
+
+		String confirmation = "<p><a href=\"http://localhost:4200/passwordChange?email=" + userPass.getEmail()
+				+ "\">To change your password click this link</a></p>";
 		StringBuffer msg = new StringBuffer();
 		msg.append("<html><body>");
 		msg.append("<br>");
-		msg.append(message);
+		msg.append(message + confirmation);
 		msg.append("</br>");
 		msg.append("</body></html>");
 
-		sendEmail(initHtmlEmail(), userPassword.getEmail(), subject, msg.toString(), Collections.emptyMap());
+		sendEmail(initHtmlEmail(), userPass.getEmail(), subject, msg.toString(), Collections.emptyMap());
 	}
 
 	private static void sendEmail(HtmlEmail htmlEmail, String toAddress, String subject, String message,

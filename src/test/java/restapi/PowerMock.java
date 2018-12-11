@@ -12,7 +12,9 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import com.vps.restapi.Api;
@@ -24,12 +26,13 @@ import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateNotFoundException;
 
-@RunWith(PowerMockRunner.class)
+@RunWith(SpringRunner.class)
 @PrepareForTest(Api.class)
 public class PowerMock {
 
 	@Mock
 	private Api api;
+	@MockBean
 	private EmailSender emailsender;
 
 	@Test
