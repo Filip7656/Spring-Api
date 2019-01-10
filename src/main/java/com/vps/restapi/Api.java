@@ -1,5 +1,8 @@
 package com.vps.restapi;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +49,7 @@ public class Api {
 	}
 
 	@RequestMapping(method = { RequestMethod.POST })
-	public ResponseEntity<User> create(@RequestBody User userData) throws EmailException, TemplateNotFoundException,
+	public ResponseEntity<User> registerUser(@RequestBody User userData) throws EmailException, TemplateNotFoundException,
 			MalformedTemplateNameException, ParseException, IOException, TemplateException {
 		// ==================================================================
 		LOG.info("user received");
@@ -60,7 +63,11 @@ public class Api {
 		String email = userData.getEmail();
 		userData.setToken(CommonUtils.generateUuid());
 		userData.setPermissions("user");
-		if (email == null || email.isEmpty()) {
+		CommonUtils.makeTheFolder(userData);
+//		CommonUtils.saveProfilePic(profilePic, userData);
+		
+		
+			if (email == null || email.isEmpty()) {
 			// ==================================================================
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("empty email");
@@ -72,6 +79,7 @@ public class Api {
 		if (uid == null || uid.isEmpty()) {
 			userData.setActive(true);
 			EmailSender.newAccountEmail(userData);
+			LOG.info("User inserted");
 			return ResponseEntity.ok(userRepository.insert(userData));
 
 		} else {
@@ -177,7 +185,7 @@ public class Api {
 	}
 
 	@RequestMapping(path = "/login", method = RequestMethod.PUT)
-	public ResponseEntity<User> loginCheck(@RequestBody User userLog) throws EmailException {
+	public ResponseEntity<User> loginUser(@RequestBody User userLog) throws EmailException {
 		Optional<User> userFromDatabase = userRepository.findByEmail(userLog.getEmail());
 		LOG.info("user to login received");
 		if (!userFromDatabase.isPresent()) {
@@ -240,6 +248,22 @@ public class Api {
 			LOG.info("Password changed");
 		}
 		return new ResponseEntity<User>(HttpStatus.ACCEPTED);
+
+	}
+	
+	@RequestMapping(path = "/profile", method = RequestMethod.GET)
+	public ResponseEntity<User> getUserProfileData(@PathVariable("email") String email) throws EmailException {
+		Optional<User> userFromDatabase = userRepository.findByEmail(email);
+		LOG.info("user to passchange received");
+		if (!userFromDatabase.isPresent()) {
+			// ==================================================================
+			LOG.debug("User not found by: " + email);
+
+			// ==================================================================
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		LOG.info("User found");
+		return new ResponseEntity<User>(userFromDatabase.get(), HttpStatus.ACCEPTED);
 
 	}
 

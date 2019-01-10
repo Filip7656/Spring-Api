@@ -16,7 +16,8 @@ public class User implements Serializable {
 	private Boolean confirmed;
 	private String token;
 	private String permissions;
-
+	private String profileurl;
+	
 	public User() {
 		super();
 	}
@@ -116,6 +117,14 @@ public class User implements Serializable {
 
 	public void setPermissions(String permissions) {
 		this.permissions = permissions;
+	}
+
+	public String getProfileurl() {
+		return profileurl;
+	}
+
+	public void setProfileurl(String profileurl) {
+		this.profileurl = profileurl;
 	}
 
 }
